@@ -13,8 +13,13 @@ global:
 
 # If existingSecret is NOT set, this secret will be created with the values below
 secret:
-  # MUST change in production
-  secretKey: "dev-secret-change-in-production"
+  # Signs sessions and reset links. Leave empty to have the chart generate a
+  # random one on install and keep it across upgrades (it is read back from the
+  # release's Secret). Tools that render without cluster access, such as
+  # `helm template` or Argo CD, cannot read it back and would generate a new
+  # one on every render, signing everyone out: set it explicitly there, or use
+  # global.existingSecret.
+  secretKey: ""
   # If postgresql.enabled is true, the internal database will be deployed.
   # If postgresql.enabled is false, you must provide your external database URL here or in existingSecret.
   databaseUrl: 'postgresql+asyncpg://postgres:postgres@{{ include "securo.fullname" . }}-postgresql:5432/securo'
@@ -35,7 +40,8 @@ secret:
   openexchangeratesAppId: ""
 
   # Agents (LLM)
-  agentsMcpJwtSecret: "dev-mcp-secret-change-in-production"
+  # Signs MCP tokens. Left empty, generated and kept like secretKey.
+  agentsMcpJwtSecret: ""
   agentsOpenaiApiKey: ""
   agentsAnthropicApiKey: ""
   agentsOpenaiCompatApiKey: ""

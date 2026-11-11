@@ -29,7 +29,10 @@ Instead, please email: **info@usesecuro.com** (or open a private security adviso
 
 ## Best Practices for Self-Hosting
 
-- Always change the default `SECRET_KEY` in production
+- Keep `SECRET_KEY` and `AGENTS_MCP_JWT_SECRET` secret. Leave them unset to have
+  random ones generated on first start (stored in the data volume), or set your own
+  with `openssl rand -hex 32`. Placeholder values that older versions shipped are
+  ignored, with a warning in the logs
 - Use HTTPS in production
 - Keep dependencies updated
 - Restrict database access to the backend service only

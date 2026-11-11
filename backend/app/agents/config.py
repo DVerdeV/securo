@@ -1,7 +1,11 @@
 from functools import lru_cache
 from pathlib import Path
 
+from pydantic import model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+from app.core.config import get_settings
+from app.core.generated_secrets import resolve_signing_secret
 
 
 class AgentSettings(BaseSettings):
@@ -30,8 +34,11 @@ class AgentSettings(BaseSettings):
     extra_mcp_servers: str = ""
 
     # Shared secret used to mint short-lived JWTs for MCP calls. Distinct
-    # from the main app secret so revocation is independent.
-    mcp_jwt_secret: str = "change-me-in-production"
+    # from the main app secret so revocation is independent. Leave it unset
+    # to have a random one generated on first start and kept next to the
+    # generated SECRET_KEY (see GENERATED_SECRETS_PATH); a value published
+    # as a default in this repository is never used.
+    mcp_jwt_secret: str = ""
     mcp_jwt_ttl_seconds: int = 600
 
     # TTL for long-lived tokens minted via the UI for external agents
@@ -75,6 +82,16 @@ class AgentSettings(BaseSettings):
     # Where uploaded knowledge files live on disk (per-instance).
     knowledge_storage_path: str = "/app/data/agent_knowledge"
     knowledge_max_file_size_mb: int = 25
+
+    @model_validator(mode="after")
+    def resolve_mcp_jwt_secret(self) -> "AgentSettings":
+        self.mcp_jwt_secret = resolve_signing_secret(
+            self.mcp_jwt_secret,
+            env_var="AGENTS_MCP_JWT_SECRET",
+            directory=get_settings().generated_secrets_dir,
+            filename="agents_mcp_jwt_secret",
+        )
+        return self
 
     # Same env_file pair as the main Settings: the CWD-relative ".env" for
     # backward compatibility plus the anchored backend/.env, so the API and the

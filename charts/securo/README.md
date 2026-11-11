@@ -54,6 +54,12 @@ global:
 
 The secret must contain the corresponding keys (e.g., `secretKey`, `databaseUrl`, `agentsOpenaiApiKey`).
 
+### Signing secrets
+
+`secret.secretKey` and `secret.agentsMcpJwtSecret` sign sessions and MCP tokens. Leave them empty and the chart generates random values on install and reads them back from the release's Secret on every upgrade. Placeholder values that older chart versions shipped are replaced the same way, which signs existing users out once.
+
+Tools that render the chart without cluster access (`helm template`, Argo CD, Flux with some settings) cannot read the Secret back and would generate new values on every render. In that case set both values explicitly, or use `global.existingSecret` with `SECRET_KEY` and `AGENTS_MCP_JWT_SECRET` in it.
+
 ## Uninstalling the Chart
 
 To uninstall/delete the `securo` deployment:

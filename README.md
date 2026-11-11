@@ -39,6 +39,8 @@ docker compose up --build
 
 Open [http://localhost:3000](http://localhost:3000) and create an account. That's it.
 
+On first start the backend generates a random `SECRET_KEY` (and MCP signing secret) and keeps it in the data volume, so you don't have to configure one. To set your own, put `SECRET_KEY=<output of openssl rand -hex 32>` in `.env`.
+
 <p align="center">
   <img src="docs/screenshot.png" width="800" alt="Securo dashboard" />
 </p>

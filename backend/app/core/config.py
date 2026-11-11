@@ -7,6 +7,8 @@ from pathlib import Path
 from pydantic import SecretStr, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+from app.core.generated_secrets import resolve_signing_secret
+
 # Use the same environment variable that systemd uses: https://systemd.io/CREDENTIALS/
 # If not defined, defaults to docker secrets defaults (https://docs.docker.com/compose/how-tos/use-secrets/)
 CREDENTIALS_DIRECTORY: list[Path] = [
@@ -23,7 +25,11 @@ class Settings(BaseSettings):
     database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/securo"
 
     # Auth
-    secret_key: SecretStr = SecretStr("change-me-in-production")
+    # Signs session JWTs and password-reset/verification tokens, and derives
+    # the key that encrypts stored LLM API keys. Leave it unset to have a
+    # random one generated on first start and kept in GENERATED_SECRETS_PATH;
+    # a value published as a default in this repository is never used.
+    secret_key: SecretStr = SecretStr("")
     local_auth_enabled: bool = True
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 60 * 24  # 24 hours
@@ -87,6 +93,20 @@ class Settings(BaseSettings):
     # fiscal document, a receipt, the contract behind it, and a correction
     # of any of them.
     storage_max_attachments_per_invoice: int = 20
+
+    # Where secrets generated on first start are kept (SECRET_KEY and
+    # AGENTS_MCP_JWT_SECRET when they are not set). Every process that signs
+    # or verifies tokens must see the same directory, and it must survive
+    # restarts. Empty means a hidden ".secrets" folder inside
+    # STORAGE_LOCAL_PATH, which Docker Compose already mounts as a shared
+    # volume in the API, worker, beat and MCP containers.
+    generated_secrets_path: str = ""
+
+    @property
+    def generated_secrets_dir(self) -> Path:
+        if self.generated_secrets_path:
+            return Path(self.generated_secrets_path)
+        return Path(self.storage_local_path) / ".secrets"
 
     # S3 Storage (for future use)
     storage_s3_bucket: str = ""
@@ -186,6 +206,17 @@ class Settings(BaseSettings):
     def default_frontend_url(self) -> "Settings":
         if not self.frontend_url:
             self.frontend_url = f"http://localhost:{self.frontend_port}"
+        return self
+
+    @model_validator(mode="after")
+    def resolve_secret_key(self) -> "Settings":
+        resolved = resolve_signing_secret(
+            self.secret_key.get_secret_value(),
+            env_var="SECRET_KEY",
+            directory=self.generated_secrets_dir,
+            filename="secret_key",
+        )
+        self.secret_key = SecretStr(resolved)
         return self
 
     @model_validator(mode="after")
