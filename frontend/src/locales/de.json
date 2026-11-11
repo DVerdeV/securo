@@ -2075,6 +2075,8 @@
     "activeAssets": "Aktive Vermögenswerte",
     "soldAssets": "Verkaufte Vermögenswerte",
     "archivedAssets": "Archivierte Vermögenswerte",
+    "showArchived": "Archivierte anzeigen",
+    "archivedHint": "Nicht in den Summen enthalten",
     "noAssets": "Noch keine Vermögenswerte",
     "created": "Vermögenswert erstellt",
     "updated": "Vermögenswert aktualisiert",

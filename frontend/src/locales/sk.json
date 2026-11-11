@@ -2198,6 +2198,8 @@
     "activeAssets": "Aktívne aktíva",
     "soldAssets": "Predané aktíva",
     "archivedAssets": "Archivované aktíva",
+    "showArchived": "Zobraziť archivované",
+    "archivedHint": "Nezapočítavajú sa do súčtov",
     "noAssets": "Zatiaľ žiadne aktíva",
     "created": "Aktívum vytvorené",
     "updated": "Aktívum aktualizované",

@@ -2076,6 +2076,8 @@
     "activeAssets": "Actieve activa",
     "soldAssets": "Verkochte activa",
     "archivedAssets": "Gearchiveerde activa",
+    "showArchived": "Gearchiveerde tonen",
+    "archivedHint": "Niet meegeteld in totalen",
     "noAssets": "Nog geen activa",
     "created": "Item gemaakt",
     "updated": "Item bijgewerkt",

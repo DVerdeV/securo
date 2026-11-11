@@ -2078,6 +2078,8 @@
     "activeAssets": "Beni attivi",
     "soldAssets": "Beni venduti",
     "archivedAssets": "Beni archiviati",
+    "showArchived": "Mostra archiviati",
+    "archivedHint": "Non inclusi nei totali",
     "noAssets": "Ancora nessun bene",
     "created": "Bene creato",
     "updated": "Bene aggiornato",

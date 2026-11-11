@@ -2076,6 +2076,8 @@
     "activeAssets": "Aktív eszközök",
     "soldAssets": "Eladott eszközök",
     "archivedAssets": "Archivált eszközök",
+    "showArchived": "Archiváltak megjelenítése",
+    "archivedHint": "Nem számít bele az összesítésekbe",
     "noAssets": "Még nincs eszköz",
     "created": "Eszköz létrehozva",
     "updated": "Eszköz frissítve",

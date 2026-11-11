@@ -2074,6 +2074,8 @@
     "activeAssets": "保有資産",
     "soldAssets": "売却済み資産",
     "archivedAssets": "アーカイブ済み資産",
+    "showArchived": "アーカイブ済みを表示",
+    "archivedHint": "合計には含まれません",
     "noAssets": "資産はまだありません",
     "created": "資産を作成しました",
     "updated": "資産を更新しました",

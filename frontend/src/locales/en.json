@@ -2074,6 +2074,8 @@
     "activeAssets": "Active Assets",
     "soldAssets": "Sold Assets",
     "archivedAssets": "Archived Assets",
+    "showArchived": "Show archived",
+    "archivedHint": "Not counted in totals",
     "noAssets": "No assets yet",
     "created": "Asset created",
     "updated": "Asset updated",

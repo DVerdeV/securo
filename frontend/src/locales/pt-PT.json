@@ -2078,6 +2078,8 @@
     "activeAssets": "Ativos",
     "soldAssets": "Vendidos",
     "archivedAssets": "Arquivados",
+    "showArchived": "Mostrar arquivados",
+    "archivedHint": "Não contam para os totais",
     "noAssets": "Nenhum ativo ainda",
     "created": "Ativo criado",
     "updated": "Ativo atualizado",
